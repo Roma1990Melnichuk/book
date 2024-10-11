@@ -4,12 +4,20 @@ import com.bookstore.dto.BookDto;
 import com.bookstore.dto.CreateBookRequestDto;
 import entity.Book;
 import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
 public interface BookMapper {
-    BookMapper INSTANCE = Mappers.getMapper(BookMapper.class);
-
     BookDto toBookDto(Book book);
-    Book toBook(CreateBookRequestDto bookDto);
+
+    default Book toBook(CreateBookRequestDto bookDto) {
+        Book book = new Book();
+        book.setId(bookDto.getId());
+        book.setTitle(bookDto.getTitle());
+        book.setAuthor(bookDto.getAuthor());
+        book.setIsbn(bookDto.getIsbn());
+        book.setPrice(bookDto.getPrice());
+        book.setDescription(bookDto.getDescription());
+        book.setСoverImage(bookDto.getCoverImage());
+        return book;
+    }
 }

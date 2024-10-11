@@ -1,15 +1,11 @@
 package entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.util.Objects;
 
+@Cacheable(false)
 @Entity
 @Table(name = "books")
 public class Book {
@@ -30,9 +26,12 @@ public class Book {
     @Column(nullable = false)
     private BigDecimal price;
 
+    @Column(nullable = false)
     private String description;
 
+    @Column(name = "coverImage")
     private String coverImage;
+
 
     public Book() {
 
@@ -100,20 +99,20 @@ public class Book {
         return coverImage;
     }
 
-    public void setCoverImage(String coverImage) {
+    public void setСoverImage(String coverImage) {
         this.coverImage = coverImage;
     }
 
     @Override
     public String toString() {
-        return "Book{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", author='" + author + '\'' +
-                ", isbn='" + isbn + '\'' +
-                ", price=" + price +
-                ", description='" + description + '\'' +
-                ", coverImage='" + coverImage + '\'' +
+        return "Book{"
+                + "id=" + id
+                + ", title='" + title + '\''
+                + ", author='" + author + '\''
+                + ", isbn='" + isbn + '\''
+                + ", price=" + price
+                + ", description='" + description + '\''
+                + ", coverImage='" + coverImage + '\'' +
                 '}';
     }
 
@@ -125,12 +124,15 @@ public class Book {
         return Objects.equals(id, book.id) &&
                 Objects.equals(title, book.title) &&
                 Objects.equals(author, book.author) &&
+                Objects.equals(description, book.description) &&
+                Objects.equals(coverImage, book.coverImage) &&
                 Objects.equals(isbn, book.isbn) &&
                 Objects.equals(price, book.price);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, author, isbn, price);
+        return Objects.hash(id, title, author, isbn,
+                price,coverImage,description);
     }
 }

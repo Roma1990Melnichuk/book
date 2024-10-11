@@ -2,34 +2,40 @@ package com.bookstore.controller;
 
 import com.bookstore.dto.BookDto;
 import com.bookstore.dto.CreateBookRequestDto;
-import service.BookService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.bookstore.service.BookService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@RequestMapping("/books")
 @RestController
-@RequestMapping("/api/books")
+@RequiredArgsConstructor
 public class BookController {
 
-    @Autowired
-    private BookService bookService;
+    private final BookService bookService;
 
-    @GetMapping
+    @GetMapping()
     public List<BookDto> getAll() {
-        return bookService.getAllBooks();
+        return bookService.findAll();
     }
 
     @GetMapping("/{id}")
     public BookDto getBookById(@PathVariable Long id) {
-        return bookService.getBookById(id);
+        return bookService.findById(id);
     }
 
     @PostMapping
-    public ResponseEntity<BookDto> createBook(@RequestBody CreateBookRequestDto bookDto) {
-        BookDto createdBook = bookService.createBook(bookDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdBook);
+    public ResponseEntity createBook(@RequestBody CreateBookRequestDto requestDto) {
+        CreateBookRequestDto createBookRequestDto = new CreateBookRequestDto();
+        createBookRequestDto.setAuthor(requestDto.getAuthor());
+        createBookRequestDto.setDescription(requestDto.getDescription());
+        createBookRequestDto.setIsbn(requestDto.getIsbn());
+        createBookRequestDto.setPrice(requestDto.getPrice());
+        createBookRequestDto.setTitle(requestDto.getTitle());
+        createBookRequestDto.setCoverImage(requestDto.getCoverImage());
+        return ResponseEntity.status(HttpStatus.CREATED).body(bookService.save(createBookRequestDto));
     }
 }
