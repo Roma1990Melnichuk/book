@@ -32,7 +32,6 @@ public class Book {
     @Column(name = "coverImage")
     private String coverImage;
 
-
     public Book() {
 
     }
