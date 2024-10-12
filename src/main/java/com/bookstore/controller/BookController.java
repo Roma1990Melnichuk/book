@@ -28,14 +28,9 @@ public class BookController {
     }
 
     @PostMapping
-    public ResponseEntity createBook(@RequestBody CreateBookRequestDto requestDto) {
-        CreateBookRequestDto createBookRequestDto = new CreateBookRequestDto();
-        createBookRequestDto.setAuthor(requestDto.getAuthor());
-        createBookRequestDto.setDescription(requestDto.getDescription());
-        createBookRequestDto.setIsbn(requestDto.getIsbn());
-        createBookRequestDto.setPrice(requestDto.getPrice());
-        createBookRequestDto.setTitle(requestDto.getTitle());
-        createBookRequestDto.setCoverImage(requestDto.getCoverImage());
-        return ResponseEntity.status(HttpStatus.CREATED).body(bookService.save(createBookRequestDto));
+    public BookDto createBook(@RequestBody CreateBookRequestDto bookDto) {
+        BookDto createdBook = bookService.save( bookDto);
+
+        return createdBook;
     }
 }

@@ -35,7 +35,7 @@ public class BookServiceImpl implements BookService {
         List<Book> books = bookRepository.findAll();
         return books.stream().map(book -> new BookDto(book.getId(),
                 book.getTitle(), book.getAuthor(), book.getIsbn(), book.getPrice(),
-                book.getDescription(), book.getCoverImage())).collect(Collectors.toList());
+                book.getDescription(), book.getCoverImage())).toList();
 
     }
 
