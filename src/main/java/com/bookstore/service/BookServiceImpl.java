@@ -8,14 +8,12 @@ import com.bookstore.entity.Book;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.bookstore.repository.BookRepository;
-
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
-
     private final BookMapper bookMapper;
 
     @Override
