@@ -1,9 +1,7 @@
 package com.bookstore.dto;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.math.BigDecimal;
+import lombok.Data;
 
 @Data
 public class BookDto {
