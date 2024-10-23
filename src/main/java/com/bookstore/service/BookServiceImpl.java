@@ -7,7 +7,6 @@ import com.bookstore.exception.EntityNotFoundException;
 import com.bookstore.mapper.BookMapper;
 import com.bookstore.repository.BookRepository;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +26,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<BookDto> findAll() {
-        return bookRepository.findAllByDeletedFalse()
+        return bookRepository.findAll()
                 .stream()
                 .map(bookMapper::toBookDto)
                 .toList();
@@ -35,7 +34,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDto findById(Long id) {
-        Book book = bookRepository.findByIdAndDeletedFalse(id)
+        Book book = bookRepository.findById(id)
                 .orElseThrow(
                         () -> new EntityNotFoundException("Book with id " + id + " not found"));
         return bookMapper.toBookDto(book);
@@ -43,44 +42,14 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDto update(Long id, CreateBookRequestDto bookRequestDto) {
-        Book existingBook = bookRepository.findById(id)
-                .orElseThrow(
-                        () -> new EntityNotFoundException("Book with id " + id + " not found"));
-
-        Optional.ofNullable(bookRequestDto.getTitle())
-                .filter(title -> !title.equals(existingBook.getTitle()))
-                .ifPresent(existingBook::setTitle);
-
-        Optional.ofNullable(bookRequestDto.getAuthor())
-                .filter(author -> !author.equals(existingBook.getAuthor()))
-                .ifPresent(existingBook::setAuthor);
-
-        Optional.ofNullable(bookRequestDto.getIsbn())
-                .filter(isbn -> !isbn.equals(existingBook.getIsbn()))
-                .ifPresent(existingBook::setIsbn);
-
-        Optional.ofNullable(bookRequestDto.getPrice())
-                .filter(price -> price.compareTo(existingBook.getPrice()) != 0)
-                .ifPresent(existingBook::setPrice);
-
-        Optional.ofNullable(bookRequestDto.getDescription())
-                .filter(description -> !description.equals(existingBook.getDescription()))
-                .ifPresent(existingBook::setDescription);
-
-        Optional.ofNullable(bookRequestDto.getCoverImage())
-                .filter(coverImage -> !coverImage.equals(existingBook.getCoverImage()))
-                .ifPresent(existingBook::setCoverImage);
-
-
-        return bookMapper.toBookDto(bookRepository.save(existingBook));
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Book with id " + id + " not found"));
+        bookMapper.updateBookFromDto(bookRequestDto, book);
+        return bookMapper.toBookDto(bookRepository.save(book));
     }
 
     @Override
     public void delete(Long id) {
-        Book existingBook = bookRepository.findByIdAndDeletedFalse(id)
-                .orElseThrow(
-                        () -> new EntityNotFoundException("Book with id " + id + " not found"));
-        existingBook.setDeleted(true);
-        bookRepository.save(existingBook);
+        bookRepository.deleteById(id);
     }
 }

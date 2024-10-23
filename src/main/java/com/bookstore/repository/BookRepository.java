@@ -6,8 +6,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BookRepository extends JpaRepository<Book, Long> {
+    List<Book> findAllByIsDeletedFalse();
 
-    List<Book> findAllByDeletedFalse();
-
-    Optional<Book> findByIdAndDeletedFalse(Long id);
+    Optional<Book> findByIdAndIsDeletedFalse(Long id);
 }

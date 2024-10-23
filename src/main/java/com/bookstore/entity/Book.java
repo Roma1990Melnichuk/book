@@ -31,10 +31,10 @@ public class Book {
     @Column(nullable = false)
     private BigDecimal price;
 
-    @Column(nullable = false)
-    private boolean deleted = false;
-
     private String description;
 
     private String coverImage;
+
+    @Column(nullable = false)
+    private boolean isDeleted = false;
 }
