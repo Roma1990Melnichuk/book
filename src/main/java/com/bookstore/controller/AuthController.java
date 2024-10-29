@@ -2,7 +2,6 @@ package com.bookstore.controller;
 
 import com.bookstore.dto.UserRegistrationRequestDto;
 import com.bookstore.dto.UserResponseDto;
-import com.bookstore.exception.RegistrationException;
 import com.bookstore.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
