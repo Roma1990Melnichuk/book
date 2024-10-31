@@ -21,12 +21,12 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserResponseDto register(UserRegistrationRequestDto requestDto) {
-        if (userRepository.findByEmail(requestDto.getEmail()).isPresent()) {
+        if (userRepository.existsByEmail(requestDto.getEmail())) {
             throw new RegistrationException("User with this email already exists");
         }
         User user = userMapper.toEntity(requestDto);
         user.setPassword(passwordEncoder.encode(requestDto.getPassword()));
-        User savedUser = userRepository.save(user);
-        return userMapper.toUserResponseDto(savedUser);
+        userRepository.save(user);
+        return userMapper.toUserResponseDto(user);
     }
 }

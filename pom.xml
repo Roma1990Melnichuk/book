@@ -23,9 +23,6 @@
 		<checkstyle.plugin.version>3.3.0</checkstyle.plugin.version>
 		<lombok.mapstruct.binding.version>0.1.0 </lombok.mapstruct.binding.version>
 		<springdoc-openapi-starter-webmvc-ui.version>2.6.0 </springdoc-openapi-starter-webmvc-ui.version>
-		<commons-beanutils.version>1.9.4 </commons-beanutils.version>
-		<spring-boot-starter-security.version>3.3.5 </spring-boot-starter-security.version>
-		<spring-boot-starter-web.version> 3.3.5 </spring-boot-starter-web.version>
 		<spring-security-core.version>6.3.3 </spring-security-core.version>
 	</properties>
 
@@ -83,24 +80,12 @@
 			<version>${springdoc-openapi-starter-webmvc-ui.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>commons-beanutils</groupId>
-			<artifactId>commons-beanutils</artifactId>
-			<version>${commons-beanutils.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
-			<version>${spring-boot-starter-security.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
-			<version>${spring-boot-starter-web.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-core</artifactId>
-			<version>${spring-security-core.version}</version>
 		</dependency>
 
 	</dependencies>

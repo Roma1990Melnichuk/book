@@ -3,6 +3,7 @@ package com.bookstore.validation;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import java.lang.reflect.Field;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 public class FieldMatchValidator implements ConstraintValidator<FieldMatch, Object> {
@@ -14,7 +15,7 @@ public class FieldMatchValidator implements ConstraintValidator<FieldMatch, Obje
     public void initialize(FieldMatch constraintAnnotation) {
         firstFieldName = constraintAnnotation.first();
         secondFieldName = constraintAnnotation.second();
-        pattern = constraintAnnotation.patternOf();
+        pattern = PasswordValidator.PASSWORD_PATTERN;
     }
 
     @Override
@@ -29,9 +30,23 @@ public class FieldMatchValidator implements ConstraintValidator<FieldMatch, Obje
             secondField.setAccessible(true);
             String firstFieldValue = (String) firstField.get(value);
             String secondFieldValue = (String) secondField.get(value);
-            return (firstFieldValue == null && secondFieldValue == null)
-                    || (firstFieldValue != null && firstFieldValue.equals(secondFieldValue)
-                    && Pattern.matches(pattern, firstFieldValue));
+
+            if (!Objects.equals(firstFieldValue, secondFieldValue)) {
+                context.buildConstraintViolationWithTemplate("Passwords do not match")
+                        .addPropertyNode(secondFieldName)
+                        .addConstraintViolation();
+                return false;
+            }
+
+            if (!Pattern.matches(pattern, firstFieldValue)) {
+                context.buildConstraintViolationWithTemplate(
+                        "Password does not meet the required pattern")
+                        .addPropertyNode(firstFieldName)
+                        .addConstraintViolation();
+                return false;
+            }
+
+            return true;
         } catch (Exception e) {
             return false;
         }

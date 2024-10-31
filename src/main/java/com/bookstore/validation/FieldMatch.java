@@ -11,12 +11,12 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = FieldMatchValidator.class)
 public @interface FieldMatch {
-    String message() default "Fields do not match";
+    String message() default "";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
     String first();
     String second();
-    String patternOf();
+    String patternOf() default PasswordValidator.PASSWORD_PATTERN;
 
     @Target({ElementType.TYPE, ElementType.ANNOTATION_TYPE})
     @Retention(RetentionPolicy.RUNTIME)

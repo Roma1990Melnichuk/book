@@ -6,8 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-@FieldMatch(first = "password", second = "repeatPassword",
-        patternOf = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)[A-Za-z\\d]{8,}$")
+@FieldMatch(first = "password", second = "repeatPassword")
 public class UserRegistrationRequestDto {
     @NotBlank
     @Email
