@@ -9,12 +9,11 @@ import com.bookstore.exception.RegistrationException;
 import com.bookstore.mapper.UserMapper;
 import com.bookstore.repository.RoleRepository;
 import com.bookstore.repository.UserRepository;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Set;
 
 @RequiredArgsConstructor
 @Service
