@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - changeSet:
+      id: createRolesTable
+      author: Roma1990Melnichuk
+      changes:
+        - createTable:
+            tableName: roles
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
