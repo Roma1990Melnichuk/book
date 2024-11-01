@@ -7,10 +7,11 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 public class FieldMatchValidator implements ConstraintValidator<FieldMatch, Object> {
-    private String firstFieldName;
-    private String secondFieldName;
     public static final String PASSWORD_PATTERN =
             "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)[A-Za-z\\d]{8,}$";
+
+    private String firstFieldName;
+    private String secondFieldName;
 
     @Override
     public void initialize(FieldMatch constraintAnnotation) {
