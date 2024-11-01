@@ -26,9 +26,7 @@ public class AuthController {
                     + "provided information and returns a confirmation of successful registration."
     )
     @ResponseStatus(HttpStatus.CREATED)
-
     public UserResponseDto registerUser(@Valid @RequestBody UserRegistrationRequestDto requestDto) {
-
         return userService.register(requestDto);
     }
 }

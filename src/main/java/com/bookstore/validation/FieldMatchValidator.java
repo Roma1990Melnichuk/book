@@ -9,13 +9,13 @@ import java.util.regex.Pattern;
 public class FieldMatchValidator implements ConstraintValidator<FieldMatch, Object> {
     private String firstFieldName;
     private String secondFieldName;
-    private String pattern;
+    public static final String PASSWORD_PATTERN =
+            "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)[A-Za-z\\d]{8,}$";
 
     @Override
     public void initialize(FieldMatch constraintAnnotation) {
         firstFieldName = constraintAnnotation.first();
         secondFieldName = constraintAnnotation.second();
-        pattern = PasswordValidator.PASSWORD_PATTERN;
     }
 
     @Override
@@ -38,7 +38,7 @@ public class FieldMatchValidator implements ConstraintValidator<FieldMatch, Obje
                 return false;
             }
 
-            if (!Pattern.matches(pattern, firstFieldValue)) {
+            if (!Pattern.matches(PASSWORD_PATTERN, firstFieldValue)) {
                 context.buildConstraintViolationWithTemplate(
                         "Password does not meet the required pattern")
                         .addPropertyNode(firstFieldName)

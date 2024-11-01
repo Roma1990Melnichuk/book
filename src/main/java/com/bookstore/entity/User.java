@@ -30,6 +30,5 @@ public class User {
     @Column(nullable = false)
     private String lastName;
 
-    @Column(name = "shipping_address")
     private String shippingAddress;
 }
