@@ -1,0 +1,58 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-users
+      author: Roma1990Melnichuk
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column: {name: email, value: "bob@example.com"}
+              - column: {name: password, value: "$2a$10$toArBF/64iNeCxoiHme8G.XjSoa9TFGRX1aNel5jSRxR0Yav915ga"}
+              - column: {name: first_name, value: "Bob"}
+              - column: {name: last_name, value: "Bob"}
+              - column: {name: shipping_address, value: "123 Main St, London, England"}
+        - insert:
+            tableName: users
+            columns:databaseChangeLog:
+  - changeSet:
+      id: insert-users
+      author: Ruslan
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column: {name: email, value: "bob@example.com"}
+              - column: {name: password, value: "$2a$10$toArBF/64iNeCxoiHme8G.XjSoa9TFGRX1aNel5jSRxR0Yav915ga"}
+              - column: {name: first_name, value: "Bob"}
+              - column: {name: last_name, value: "Bob"}
+              - column: {name: shipping_address, value: "123 Main St, London, England"}
+        - insert:
+            tableName: users
+            columns:
+              - column: {name: email, value: "alice@example.com"}
+              - column: {name: password, value: "$2a$10$E.kKEdBztiHTWf3EbBEotuAyVDuWRose3bDwoF9aAIitVw3Fykreq"}
+              - column: {name: first_name, value: "Alice"}
+              - column: {name: last_name, value: "Alice"}
+              - column: {name: shipping_address, value: "123 Main St, London, England"}
+        - insert:
+            tableName: users
+            columns:
+              - column: {name: email, value: "john@example.com"}
+              - column: {name: password, value: "$2a$10$toArBF/64iNeCxoiHme8G.XjSoa9TFGRX1aNel5jSRxR0Yav915ga"}
+              - column: {name: first_name, value: "John"}
+              - column: {name: last_name, value: "John"}
+              - column: {name: shipping_address, value: "123 Main St, London, England"}
+
+              - column: {name: email, value: "alice@example.com"}
+              - column: {name: password, value: "$2a$10$E.kKEdBztiHTWf3EbBEotuAyVDuWRose3bDwoF9aAIitVw3Fykreq"}
+              - column: {name: first_name, value: "Alice"}
+              - column: {name: last_name, value: "Alice"}
+              - column: {name: shipping_address, value: "123 Main St, London, England"}
+        - insert:
+            tableName: users
+            columns:
+              - column: {name: email, value: "john@example.com"}
+              - column: {name: password, value: "$2a$10$toArBF/64iNeCxoiHme8G.XjSoa9TFGRX1aNel5jSRxR0Yav915ga"}
+              - column: {name: first_name, value: "John"}
+              - column: {name: last_name, value: "John"}
+              - column: {name: shipping_address, value: "123 Main St, London, England"}
