@@ -17,3 +17,7 @@ databaseChangeLog:
                   type: varchar(255)
                   constraints:
                     nullable: false
+              - addUniqueConstraint:
+                    columnNames: name
+                    constraintName: unique_role_name
+                    tableName: roles
