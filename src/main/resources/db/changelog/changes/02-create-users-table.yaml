@@ -38,3 +38,23 @@ databaseChangeLog:
               - column:
                   name: shipping_address
                   type: varchar(255)
+              - column:
+                  name: is_deleted
+                  type: boolean
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: add-is-deleted-to-users
+      author: Roma1990Melnichuk
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: is_deleted
+                  type: boolean
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false

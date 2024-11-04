@@ -39,7 +39,7 @@ public class BookController {
         return bookService.findAll(pageable);
     }
 
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     @Operation(summary = "Get book by ID",
             description = "Retrieve details of a specific book by its ID")
     @GetMapping("/{id}")
