@@ -11,6 +11,8 @@ databaseChangeLog:
               - column: {name: first_name, value: "Bob"}
               - column: {name: last_name, value: "Bob"}
               - column: {name: shipping_address, value: "123 Main St, London, England"}
+              - column: {name: is_deleted,valueBoolean: false}
+
   - changeSet:
       id: insert-user-2
       author: Roma1990Melnichuk
@@ -23,3 +25,4 @@ databaseChangeLog:
               - column: {name: first_name, value: "Alice"}
               - column: {name: last_name, value: "Alice"}
               - column: {name: shipping_address, value: "123 Main St, London, England"}
+              - column: {name: is_deleted,valueBoolean: false}

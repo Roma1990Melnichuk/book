@@ -21,16 +21,16 @@ public class Role implements GrantedAuthority {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(columnDefinition = "varchar", nullable = false, unique = true)
+    @Column(nullable = false, unique = true)
     @Enumerated(EnumType.STRING)
     private RoleName name;
 
-    @Column(name = "is_deleted", nullable = false)
+    @Column(nullable = false)
     private boolean isDeleted = false;
 
     @Override
     public String getAuthority() {
-        return "ROLE_" + name.name();
+        return name.name();
     }
 
     public enum RoleName {

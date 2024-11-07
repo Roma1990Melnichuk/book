@@ -4,7 +4,7 @@ databaseChangeLog:
       author: Roma1990Melnichuk
       changes:
         - createTable:
-            tableName: user_roles
+            tableName: users_roles
             columns:
               - column:
                   name: user_id
