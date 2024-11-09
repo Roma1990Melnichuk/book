@@ -1,14 +1,11 @@
 package com.bookstore.validation;
 
-import static com.bookstore.validation.FieldMatchValidator.PASSWORD_PATTERN;
-
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
 
 @Constraint(validatedBy = FieldMatchValidator.class)
 @Target({ ElementType.TYPE })

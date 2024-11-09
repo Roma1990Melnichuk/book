@@ -52,6 +52,7 @@ public class SecurityConfig {
                 .userDetailsService(userDetailsService)
                 .build();
     }
+
     @Bean
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration authenticationConfiguration
