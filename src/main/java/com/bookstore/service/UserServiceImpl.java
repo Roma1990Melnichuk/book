@@ -2,10 +2,14 @@ package com.bookstore.service;
 
 import com.bookstore.dto.UserRegistrationRequestDto;
 import com.bookstore.dto.UserResponseDto;
+import com.bookstore.entity.Role;
 import com.bookstore.entity.User;
+import com.bookstore.exception.EntityNotFoundException;
 import com.bookstore.exception.RegistrationException;
 import com.bookstore.mapper.UserMapper;
+import com.bookstore.repository.RoleRepository;
 import com.bookstore.repository.UserRepository;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
@@ -26,6 +31,10 @@ public class UserServiceImpl implements UserService {
         }
         User user = userMapper.toEntity(requestDto);
         user.setPassword(passwordEncoder.encode(requestDto.getPassword()));
+        Role role = roleRepository.findByName(Role.RoleName.ROLE_USER)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Role not found " + Role.RoleName.ROLE_USER));
+        user.setRoles(Set.of(role));
         userRepository.save(user);
         return userMapper.toUserResponseDto(user);
     }
