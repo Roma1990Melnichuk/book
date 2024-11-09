@@ -3,7 +3,6 @@ package com.bookstore.service;
 import com.bookstore.exception.EntityNotFoundException;
 import com.bookstore.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
