@@ -5,9 +5,9 @@ import com.bookstore.dto.CategoryDto;
 import com.bookstore.dto.CategoryRequestDto;
 import com.bookstore.response.ErrorResponse;
 import com.bookstore.response.ResponseHandler;
-import com.bookstore.service.CategoryService;
 import com.bookstore.response.SuccessResponse;
 import com.bookstore.service.BookService;
+import com.bookstore.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -28,8 +29,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @Tag(name = "Category Management", description = "Endpoints for managing categories")
 @RestController

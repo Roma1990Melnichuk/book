@@ -5,7 +5,11 @@ import com.bookstore.dto.BookDtoWithoutCategoryIds;
 import com.bookstore.dto.CreateBookRequestDto;
 import com.bookstore.entity.Book;
 import com.bookstore.entity.Category;
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.Mappings;
+import org.mapstruct.Named;
 
 @Mapper(componentModel = "spring")
 public interface BookMapper {
@@ -20,9 +24,11 @@ public interface BookMapper {
             @Mapping(target = "id", ignore = true),
             @Mapping(target = "deleted", ignore = true)
     })
+
     Book toBook(CreateBookRequestDto bookDto);
 
     void updateBookFromDto(CreateBookRequestDto bookRequestDto, @MappingTarget Book book);
+
     BookDtoWithoutCategoryIds toDtoWithoutCategories(Book book);
 
     @Named("categoryToId")

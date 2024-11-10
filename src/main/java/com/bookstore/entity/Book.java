@@ -11,13 +11,11 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.util.Set;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
 @Getter
 @Setter
@@ -58,7 +56,8 @@ public class Book {
     @EqualsAndHashCode.Exclude
     private Set<Category> categories;
 
-    public Book() { }
+    public Book() {
+    }
 
     public Book(Long id) {
         this.id = id;
