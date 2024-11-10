@@ -1,16 +1,32 @@
 package com.bookstore.mapper;
 
 import com.bookstore.dto.BookDto;
+import com.bookstore.dto.BookDtoWithoutCategoryIds;
 import com.bookstore.dto.CreateBookRequestDto;
 import com.bookstore.entity.Book;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
+import com.bookstore.entity.Category;
+import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")
 public interface BookMapper {
+    @Mappings({
+            @Mapping(source = "categories", target = "categoryIds",
+                    qualifiedByName = "categoryToId")
+    })
     BookDto toBookDto(Book book);
 
+    @Mappings({
+            @Mapping(source = "categories", target = "categories"),
+            @Mapping(target = "id", ignore = true),
+            @Mapping(target = "deleted", ignore = true)
+    })
     Book toBook(CreateBookRequestDto bookDto);
 
     void updateBookFromDto(CreateBookRequestDto bookRequestDto, @MappingTarget Book book);
+    BookDtoWithoutCategoryIds toDtoWithoutCategories(Book book);
+
+    @Named("categoryToId")
+    default Long categoryToId(Category category) {
+        return category.getId();
+    }
 }
