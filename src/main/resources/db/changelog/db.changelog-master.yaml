@@ -12,8 +12,4 @@ databaseChangeLog:
   - include:
       file: db/changelog/changes/06-create-categories-table.yml
   - include:
-      file: db/changelog/changes/07-loaddata-categories.yml
-  - include:
       file: db/changelog/changes/08-create-books-categories-table.yml
-  - include:
-      file: db/changelog/changes/09-loaddata-books-categories.yml

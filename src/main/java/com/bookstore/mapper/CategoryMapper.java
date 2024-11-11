@@ -1,14 +1,14 @@
 package com.bookstore.mapper;
 
-import com.bookstore.config.MapperConfig;
 import com.bookstore.dto.CategoryDto;
 import com.bookstore.dto.CategoryRequestDto;
 import com.bookstore.entity.Category;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.Mappings;
 
-@Mapper(config = MapperConfig.class)
+@Mapper(componentModel = "spring")
 public interface CategoryMapper {
     CategoryDto toDto(Category category);
 
@@ -17,4 +17,8 @@ public interface CategoryMapper {
             @Mapping(target = "deleted", ignore = true)
     })
     Category toModel(CategoryRequestDto dto);
+
+    void updateCategoryFromDto(
+            CategoryRequestDto categoryRequestDto, @MappingTarget Category category);
 }
+

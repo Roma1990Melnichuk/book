@@ -10,6 +10,8 @@ import com.bookstore.response.SuccessResponse;
 import com.bookstore.security.AuthenticationService;
 import com.bookstore.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,10 +30,13 @@ public class AuthController {
     @PostMapping("/registration")
     @Operation(
             summary = "Register a new user",
-            description = "Registers a new user with the "
-                    + "provided information and returns a confirmation of successful registration."
+            description = "Registers a new user with the provided information and returns "
+                    + "a confirmation of successful registration."
     )
-
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "User registered successfully"),
+            @ApiResponse(responseCode = "409", description = "User already exists")
+    })
     public SuccessResponse<UserResponseDto> register(
             @Valid @RequestBody UserRegistrationRequestDto requestDto)
             throws RegistrationException {
@@ -41,6 +46,15 @@ public class AuthController {
     }
 
     @PostMapping("/login")
+    @Operation(
+            summary = "Login user",
+            description = "Authenticates a user with provided credentials "
+                    + "and returns an authentication token."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User authenticated successfully"),
+            @ApiResponse(responseCode = "401", description = "Invalid credentials")
+    })
     public SuccessResponse<UserLoginResponseDto> login(
             @Valid @RequestBody UserLoginRequestDto requestDto) {
         return ResponseHandler.getSuccessResponse(

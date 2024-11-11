@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,7 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "Category Management", description = "Endpoints for managing categories")
 @RestController
-@RequestMapping("/api/categories")
+@RequestMapping("/categories")
 @RequiredArgsConstructor
 public class CategoryController {
     private final CategoryService categoryService;
@@ -57,9 +58,10 @@ public class CategoryController {
 
     @GetMapping
     @Operation(summary = "Get all categories", description = "Get all categories")
-    public SuccessResponse<List<CategoryDto>> getAll(Pageable pageable) {
+    public SuccessResponse<Page<CategoryDto>> getAll(Pageable pageable) {
         return ResponseHandler.getSuccessResponse(
-                categoryService.findAll(pageable));
+                categoryService.findAll(pageable)
+        );
     }
 
     @GetMapping("/{id}")

@@ -7,9 +7,9 @@ import com.bookstore.exception.EntityAlreadyExistsException;
 import com.bookstore.exception.EntityNotFoundException;
 import com.bookstore.mapper.CategoryMapper;
 import com.bookstore.repository.CategoryRepository;
-import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -21,10 +21,9 @@ public class CategoryServiceImpl implements CategoryService {
     private final LocaleService localeService;
 
     @Override
-    public List<CategoryDto> findAll(Pageable pageable) {
-        return categoryRepository.findAll(pageable).stream()
-                .map(categoryMapper::toDto)
-                .toList();
+    public Page<CategoryDto> findAll(Pageable pageable) {
+        return categoryRepository.findAll(pageable)
+                .map(categoryMapper::toDto);
     }
 
     @Override
@@ -45,19 +44,16 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto update(Long id, CategoryRequestDto categoryDto) {
-        Category categoryFromDB = getModelById(id);
+        Category category = getModelById(id);
         String newName = categoryDto.getName();
 
-        if (!Objects.equals(categoryFromDB.getName(), newName)
+        if (!Objects.equals(category.getName(), newName)
                 && categoryRepository.existsByName(newName)) {
             throw getAlreadyExistsException();
         }
 
-        Category category = categoryMapper.toModel(categoryDto);
-        category.setId(id);
-        return categoryMapper.toDto(
-                categoryRepository.save(category)
-        );
+        categoryMapper.updateCategoryFromDto(categoryDto, category);
+        return categoryMapper.toDto(categoryRepository.save(category));
     }
 
     @Override
