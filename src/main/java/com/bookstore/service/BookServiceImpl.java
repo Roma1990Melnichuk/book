@@ -55,10 +55,8 @@ public class BookServiceImpl implements BookService {
         bookRepository.deleteById(id);
     }
 
-    @Override
-    public List<BookDtoWithoutCategoryIds> getBooksByCategoryId(Long id, Pageable pageable) {
-        return bookRepository.findAllByCategoriesId(id, pageable).stream()
-                .map(bookMapper::toDtoWithoutCategories)
-                .toList();
+    public Page<BookDtoWithoutCategoryIds> getBooksByCategoryId(Long categoryId, Pageable pageable) {
+        return bookRepository.findByCategoriesId(categoryId, pageable)
+                .map(bookMapper::toDtoWithoutCategories);
     }
 }

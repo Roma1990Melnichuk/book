@@ -21,4 +21,3 @@ public interface CategoryMapper {
     void updateCategoryFromDto(
             CategoryRequestDto categoryRequestDto, @MappingTarget Category category);
 }
-
