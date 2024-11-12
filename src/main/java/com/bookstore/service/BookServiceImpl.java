@@ -8,7 +8,6 @@ import com.bookstore.exception.EntityNotFoundException;
 import com.bookstore.mapper.BookMapper;
 import com.bookstore.repository.BookRepository;
 import com.bookstore.repository.CategoryRepository;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -55,7 +54,8 @@ public class BookServiceImpl implements BookService {
         bookRepository.deleteById(id);
     }
 
-    public Page<BookDtoWithoutCategoryIds> getBooksByCategoryId(Long categoryId, Pageable pageable) {
+    public Page<BookDtoWithoutCategoryIds> getBooksByCategoryId(
+            Long categoryId, Pageable pageable) {
         return bookRepository.findByCategoriesId(categoryId, pageable)
                 .map(bookMapper::toDtoWithoutCategories);
     }

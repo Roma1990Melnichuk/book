@@ -3,7 +3,6 @@ package com.bookstore.service;
 import com.bookstore.dto.BookDto;
 import com.bookstore.dto.BookDtoWithoutCategoryIds;
 import com.bookstore.dto.CreateBookRequestDto;
-import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
