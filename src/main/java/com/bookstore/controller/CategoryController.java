@@ -103,10 +103,8 @@ public class CategoryController {
     @GetMapping("/{id}/books")
     @Operation(summary = "Get all books by category id",
             description = "Get all books in a specific category with pagination support")
-    public SuccessResponse<Page<BookDtoWithoutCategoryIds>> getBooksByCategoryId(
+    public Page<BookDtoWithoutCategoryIds> getBooksByCategoryId(
             @PathVariable Long id, Pageable pageable) {
-        return ResponseHandler.getSuccessResponse(
-                bookService.getBooksByCategoryId(id, pageable)
-        );
+        return bookService.getBooksByCategoryId(id, pageable);
     }
 }
