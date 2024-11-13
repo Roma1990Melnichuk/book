@@ -4,6 +4,7 @@ import com.bookstore.dto.BookDto;
 import com.bookstore.dto.BookDtoWithoutCategoryIds;
 import com.bookstore.dto.CreateBookRequestDto;
 import com.bookstore.entity.Book;
+import com.bookstore.entity.Category;
 import com.bookstore.exception.EntityNotFoundException;
 import com.bookstore.mapper.BookMapper;
 import com.bookstore.repository.BookRepository;
@@ -12,6 +13,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -58,5 +64,20 @@ public class BookServiceImpl implements BookService {
             Long categoryId, Pageable pageable) {
         return bookRepository.findByCategoriesId(categoryId, pageable)
                 .map(bookMapper::toDtoWithoutCategories);
+    }
+
+    public void validateBooksExistence(List<Long> booksIds) {
+        Set<Long> existingBooks = bookRepository.findAllById(booksIds)
+                .stream()
+                .map(Book::getId)
+                .collect(Collectors.toSet());
+
+        if (existingBooks.size() != booksIds.size()) {
+            Set<Long> notFoundBooks = new HashSet<>(booksIds);
+            notFoundBooks.removeAll(existingBooks);
+            throw new EntityNotFoundException(
+                    "Can't find one or more books by id: " + notFoundBooks
+            );
+        }
     }
 }
