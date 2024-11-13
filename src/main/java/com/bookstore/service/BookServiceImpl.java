@@ -4,20 +4,18 @@ import com.bookstore.dto.BookDto;
 import com.bookstore.dto.BookDtoWithoutCategoryIds;
 import com.bookstore.dto.CreateBookRequestDto;
 import com.bookstore.entity.Book;
-import com.bookstore.entity.Category;
 import com.bookstore.exception.EntityNotFoundException;
 import com.bookstore.mapper.BookMapper;
 import com.bookstore.repository.BookRepository;
 import com.bookstore.repository.CategoryRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
