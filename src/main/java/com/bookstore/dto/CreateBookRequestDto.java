@@ -1,10 +1,13 @@
 package com.bookstore.dto;
 
+import com.bookstore.entity.Category;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.Set;
 import lombok.Data;
 
 @Data
@@ -26,4 +29,6 @@ public class CreateBookRequestDto {
     private String description;
     @Schema(description = "Cover image URL of the book", example = "http://example.com/cover.jpg")
     private String coverImage;
+    @NotEmpty
+    private Set<Category> categories;
 }
