@@ -67,7 +67,8 @@ public class ShoppingCartController {
 
     @PostMapping("/cart")
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Add book to shopping cart", description = "Add a book to the user's shopping cart")
+    @Operation(summary = "Add book to shopping cart",
+            description = "Add a book to the user's shopping cart")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", useReturnTypeSchema = true),
             @ApiResponse(responseCode = "400", content =
