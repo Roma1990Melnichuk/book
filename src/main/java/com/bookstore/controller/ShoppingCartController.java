@@ -1,7 +1,8 @@
 package com.bookstore.controller;
 
+import com.bookstore.dto.CartItemRequestDto;
 import com.bookstore.dto.ShoppingCartDto;
-import com.bookstore.dto.ShoppingCartRequestDto;
+import com.bookstore.dto.UpdateCartItemDto;
 import com.bookstore.entity.User;
 import com.bookstore.response.ErrorResponse;
 import com.bookstore.response.ResponseHandler;
@@ -28,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "Shopping Cart Management", description = "Endpoints for managing shopping carts")
 @RestController
-@RequestMapping("/api/cart")
+@RequestMapping("/cart")
 @RequiredArgsConstructor
 public class ShoppingCartController {
     private final ShoppingCartService shoppingCartService;
@@ -44,14 +45,14 @@ public class ShoppingCartController {
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Create a new shopping cart", description = "Create a new shopping cart")
     public SuccessResponse<ShoppingCartDto> updateShoppingCart(
-            @Valid @RequestBody ShoppingCartRequestDto dto, @AuthenticationPrincipal User user) {
+            @Valid @RequestBody UpdateCartItemDto dto, @AuthenticationPrincipal User user) {
         return ResponseHandler.getSuccessResponse(
                 shoppingCartService.save(dto, user),
                 HttpStatus.CREATED
         );
     }
 
-    @DeleteMapping("/cart-items/{bookId}")
+    @DeleteMapping("/cart/items/{cartItemId}")
     @Operation(summary = "Delete item from shopping cart",
             description = "Delete item from shopping cart")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -60,8 +61,24 @@ public class ShoppingCartController {
             @ApiResponse(responseCode = "404", content =
                     { @Content(schema = @Schema(implementation = ErrorResponse.class)) }),
     })
-    public void deleteBookFromCartById(@PathVariable Long bookId,
-                                       @AuthenticationPrincipal User user) {
-        shoppingCartService.deleteCartItem(bookId, user.getId());
+    public void deleteBookFromCartById(@PathVariable Long cartItemId) {
+        shoppingCartService.deleteCartItem(cartItemId);
+    }
+
+    @PostMapping("/cart")
+    @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "Add book to shopping cart", description = "Add a book to the user's shopping cart")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", useReturnTypeSchema = true),
+            @ApiResponse(responseCode = "400", content =
+                    { @Content(schema = @Schema(implementation = ErrorResponse.class)) }),
+    })
+    public SuccessResponse<ShoppingCartDto> addBookToCart(
+            @Valid @RequestBody CartItemRequestDto dto,
+            @AuthenticationPrincipal User user) {
+        return ResponseHandler.getSuccessResponse(
+                shoppingCartService.addBookToCart(dto, user),
+                HttpStatus.CREATED
+        );
     }
 }

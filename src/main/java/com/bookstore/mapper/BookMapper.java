@@ -35,4 +35,14 @@ public interface BookMapper {
     default Long categoryToId(Category category) {
         return category.getId();
     }
+
+    @Named("bookFromId")
+    default Book bookFromId(Long id) {
+        if (id == null) {
+            return null;
+        }
+        Book book = new Book();
+        book.setId(id);
+        return book;
+    }
 }

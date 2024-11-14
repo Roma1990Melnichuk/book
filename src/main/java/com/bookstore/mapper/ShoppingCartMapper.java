@@ -1,7 +1,6 @@
 package com.bookstore.mapper;
 
 import com.bookstore.dto.ShoppingCartDto;
-import com.bookstore.dto.ShoppingCartRequestDto;
 import com.bookstore.entity.ShoppingCart;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -17,5 +16,5 @@ public interface ShoppingCartMapper {
     @Mappings({
             @Mapping(source = "cartItems", target = "cartItems"),
     })
-    ShoppingCart toModel(ShoppingCartRequestDto dto);
+    ShoppingCart toModel(ShoppingCartDto dto);
 }

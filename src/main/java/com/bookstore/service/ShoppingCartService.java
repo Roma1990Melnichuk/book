@@ -1,15 +1,21 @@
 package com.bookstore.service;
 
+import com.bookstore.dto.CartItemRequestDto;
+import com.bookstore.dto.CartItemResponseDto;
 import com.bookstore.dto.ShoppingCartDto;
-import com.bookstore.dto.ShoppingCartRequestDto;
+import com.bookstore.dto.UpdateCartItemDto;
 import com.bookstore.entity.User;
 
 public interface ShoppingCartService {
-    void createFor(User user);
+    void createShoppingCart(User user);
 
-    ShoppingCartDto save(ShoppingCartRequestDto dto, User user);
+    ShoppingCartDto save(UpdateCartItemDto itemDto, User user);
 
     ShoppingCartDto getByUserId(Long id);
 
-    void deleteCartItem(Long bookId, Long userId);
+    ShoppingCartDto updateCartItemQuantity(Long cartItemId, UpdateCartItemDto request);
+
+    ShoppingCartDto addBookToCart(CartItemRequestDto request, User user);
+
+    void deleteCartItem(Long cartItemId);
 }

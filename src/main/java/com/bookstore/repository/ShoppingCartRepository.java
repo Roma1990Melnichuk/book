@@ -1,14 +1,15 @@
 package com.bookstore.repository;
 
 import com.bookstore.entity.ShoppingCart;
+import com.bookstore.entity.User;
 import java.util.Optional;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 
 public interface ShoppingCartRepository extends JpaRepository<ShoppingCart, Long> {
-    @Query("FROM ShoppingCart sc "
-            + "LEFT JOIN FETCH sc.cartItems ci "
-            + "JOIN FETCH ci.book "
-            + "WHERE sc.user.id = :userId")
+
+    @EntityGraph(attributePaths = {"cartItems", "cartItems.book"})
     Optional<ShoppingCart> getByUserId(Long userId);
+
+    Optional<ShoppingCart> findByUser(User currentUser);
 }
