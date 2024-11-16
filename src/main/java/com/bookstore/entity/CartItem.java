@@ -32,5 +32,5 @@ public class CartItem {
 
     @Column(nullable = false)
     @EqualsAndHashCode.Exclude
-    private int quantity;
+    private Integer quantity;
 }

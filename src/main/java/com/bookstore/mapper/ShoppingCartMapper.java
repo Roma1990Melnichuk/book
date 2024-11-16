@@ -4,17 +4,11 @@ import com.bookstore.dto.ShoppingCartDto;
 import com.bookstore.entity.ShoppingCart;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {CartItemMapper.class})
 public interface ShoppingCartMapper {
-    @Mappings({
-            @Mapping(source = "user.id", target = "userId"),
-    })
+    @Mapping(source = "user.id", target = "userId")
     ShoppingCartDto toDto(ShoppingCart shoppingCart);
 
-    @Mappings({
-            @Mapping(source = "cartItems", target = "cartItems"),
-    })
     ShoppingCart toModel(ShoppingCartDto dto);
 }

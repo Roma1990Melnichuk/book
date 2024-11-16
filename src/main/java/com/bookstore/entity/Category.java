@@ -32,7 +32,7 @@ public class Category {
     private String description;
 
     @Column(nullable = false)
-    private boolean isDeleted = false;
+    private Boolean isDeleted = false;
 
     public Category(Long id) {
         this.id = id;

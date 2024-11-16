@@ -5,9 +5,9 @@ import lombok.Data;
 
 @Data
 public class UpdateCartItemDto {
-    @NotNull
+    @NotNull(message = "Book ID cannot be null")
     private Long bookId;
 
-    @NotNull
+    @NotNull(message = "Quantity cannot be null")
     private Integer quantity;
 }

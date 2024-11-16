@@ -3,6 +3,7 @@ package com.bookstore.entity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapsId;
@@ -21,11 +22,12 @@ import lombok.ToString;
 @Table(name = "shopping_carts")
 @Getter
 @Setter
+@NoArgsConstructor
 @EqualsAndHashCode
 @ToString
-@NoArgsConstructor
 public class ShoppingCart {
     @Id
+    @GeneratedValue
     private Long id;
 
     @OneToOne
@@ -33,13 +35,10 @@ public class ShoppingCart {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "shoppingCart", fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "shoppingCart",
+            fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Set<CartItem> cartItems = new HashSet<>();
 
-    public ShoppingCart(Long id) {
-        this.id = id;
-    }
 }

@@ -26,7 +26,7 @@ public class Role implements GrantedAuthority {
     private RoleName name;
 
     @Column(nullable = false)
-    private boolean isDeleted = false;
+    private Boolean isDeleted = false;
 
     @Override
     public String getAuthority() {
