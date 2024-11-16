@@ -22,7 +22,7 @@ public interface BookMapper {
     @Mappings({
             @Mapping(source = "categories", target = "categories"),
             @Mapping(target = "id", ignore = true),
-            @Mapping(target = "deleted", ignore = true)
+            @Mapping(target = "isDeleted", ignore = true)
     })
 
     Book toBook(CreateBookRequestDto bookDto);
