@@ -1,9 +1,9 @@
 package com.bookstore.entity;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapsId;
@@ -14,7 +14,6 @@ import java.util.HashSet;
 import java.util.Set;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -22,12 +21,10 @@ import lombok.ToString;
 @Table(name = "shopping_carts")
 @Getter
 @Setter
-@NoArgsConstructor
 @EqualsAndHashCode
 @ToString
 public class ShoppingCart {
     @Id
-    @GeneratedValue
     private Long id;
 
     @OneToOne
@@ -41,4 +38,6 @@ public class ShoppingCart {
     @ToString.Exclude
     private Set<CartItem> cartItems = new HashSet<>();
 
+    @Column(nullable = false)
+    private boolean isDeleted = false;
 }

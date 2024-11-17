@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +25,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/cart")
+@RequestMapping("/api/cart")
 @RequiredArgsConstructor
 @Tag(name = "Shopping Cart Management", description = "Endpoints for managing shopping carts")
 public class ShoppingCartController {
@@ -33,44 +34,19 @@ public class ShoppingCartController {
     @GetMapping
     @Operation(summary = "Get user's shopping cart",
             description = "Retrieve the shopping cart of the authenticated user")
-    public SuccessResponse<ShoppingCartDto> getShoppingCart(
-            @AuthenticationPrincipal User user) {
+    public SuccessResponse<ShoppingCartDto> getShoppingCart(@AuthenticationPrincipal User user) {
         return ResponseHandler.getSuccessResponse(
                 shoppingCartService.getByUserId(user.getId()));
     }
 
-    @PostMapping("/items")
-    @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Add or update book in shopping cart",
-            description = "Add a new book to the user's shopping cart or update its quantity")
-    public SuccessResponse<ShoppingCartDto> updateCartItem(
-            @Valid @RequestBody UpdateCartItemDto dto,
-            @AuthenticationPrincipal User user) {
-        return ResponseHandler.getSuccessResponse(
-                shoppingCartService.save(dto, user),
-                HttpStatus.CREATED
-        );
-    }
-
-    @DeleteMapping("/items/{cartItemId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @Operation(summary = "Delete item from shopping cart",
-            description = "Remove a specific item from the user's shopping cart")
-    public void deleteBookFromCartById(@PathVariable Long cartItemId) {
-        shoppingCartService.deleteCartItem(cartItemId);
-    }
-
-    @PostMapping("/items/add")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Add a book to the shopping cart",
-            description = "Add a book to the user's shopping cart without updating its quantity")
-    public SuccessResponse<ShoppingCartDto> addBookToCart(
-            @Valid @RequestBody CartItemRequestDto dto,
-            @AuthenticationPrincipal User user) {
-        return ResponseHandler.getSuccessResponse(
-                shoppingCartService.addBookToCart(dto, user),
-                HttpStatus.CREATED
-        );
+            description = "Add a book to the user's shopping cart")
+    public ShoppingCartDto addBookToShoppingCart(@RequestBody @Valid
+                                                     UpdateCartItemDto request, Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+        return shoppingCartService.save(request, user);
     }
 
     @PutMapping("/items/{cartItemId}")
@@ -83,5 +59,13 @@ public class ShoppingCartController {
         shoppingCartService.updateCartItemQuantity(cartItemId, requestDto);
         return ResponseHandler.getSuccessResponse(
                 shoppingCartService.getByUserId(user.getId()));
+    }
+
+    @DeleteMapping("/items/{cartItemId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "Delete item from shopping cart",
+            description = "Remove a specific item from the user's shopping cart")
+    public void deleteBookFromCartById(@PathVariable Long cartItemId) {
+        shoppingCartService.deleteCartItem(cartItemId);
     }
 }
