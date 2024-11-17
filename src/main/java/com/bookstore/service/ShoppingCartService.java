@@ -1,6 +1,5 @@
 package com.bookstore.service;
 
-import com.bookstore.dto.CartItemRequestDto;
 import com.bookstore.dto.ShoppingCartDto;
 import com.bookstore.dto.UpdateCartItemDto;
 import com.bookstore.entity.User;

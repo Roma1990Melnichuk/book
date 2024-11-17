@@ -1,6 +1,5 @@
 package com.bookstore.controller;
 
-import com.bookstore.dto.CartItemRequestDto;
 import com.bookstore.dto.ShoppingCartDto;
 import com.bookstore.dto.UpdateCartItemDto;
 import com.bookstore.entity.User;
@@ -44,7 +43,7 @@ public class ShoppingCartController {
     @Operation(summary = "Add a book to the shopping cart",
             description = "Add a book to the user's shopping cart")
     public ShoppingCartDto addBookToShoppingCart(@RequestBody @Valid
-                                                     UpdateCartItemDto request, Authentication authentication) {
+                    UpdateCartItemDto request, Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         return shoppingCartService.save(request, user);
     }
