@@ -30,29 +30,29 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public ShoppingCartDto save(UpdateCartItemDto itemDto, User user) {
-        ShoppingCart shoppingCart = shoppingCartRepository.findByUserAndIsDeletedFalse(user)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "Shopping cart not found for user with ID "
-                                + user.getId() + " or it is deleted"));
-
-        Book book = bookRepository.findById(itemDto.getBookId())
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "Book with ID " + itemDto.getBookId() + " not found"));
-
-        CartItem existingCartItem = shoppingCart.getCartItems().stream()
-                .filter(cartItem -> cartItem.getBook().equals(book))
-                .findFirst()
-                .orElse(null);
-
-        if (existingCartItem != null) {
-            existingCartItem.setQuantity(existingCartItem.getQuantity() + itemDto.getQuantity());
-            cartItemRepository.save(existingCartItem);
-        } else {
-            CartItem newCartItem = createNewCartItem(book, itemDto.getQuantity(), shoppingCart);
-            shoppingCart.getCartItems().add(newCartItem);
-            cartItemRepository.save(newCartItem);
+    public ShoppingCartDto addBookToShoppingCart(UpdateCartItemDto itemDto, User user) {
+        if (itemDto.getQuantity() <= 0) {
+            throw new IllegalArgumentException("Quantity must be greater than zero");
         }
+
+        ShoppingCart shoppingCart = shoppingCartRepository.findByUserAndIsDeletedFalse(user)
+                .orElseThrow(() -> new EntityNotFoundException("Shopping cart not found"));
+
+        CartItem cartItem = shoppingCart.getCartItems().stream()
+                .filter(item -> item.getBook().getId().equals(itemDto.getBookId()))
+                .findFirst()
+                .map(existingItem -> updateExistingCartItem(existingItem, itemDto.getQuantity()))
+                .orElseGet(() -> {
+                    Book book = bookRepository.findById(itemDto.getBookId())
+                            .orElseThrow(() -> new EntityNotFoundException("Book not found"));
+                    return createNewCartItem(book, itemDto.getQuantity(), shoppingCart);
+                });
+
+        if (cartItem != null) {
+            shoppingCart.getCartItems().add(cartItem);
+        }
+
+        shoppingCartRepository.save(shoppingCart);
 
         return shoppingCartMapper.toDto(shoppingCart);
     }
@@ -104,5 +104,10 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         newCartItem.setQuantity(quantity);
         newCartItem.setShoppingCart(shoppingCart);
         return newCartItem;
+    }
+
+    private CartItem updateExistingCartItem(CartItem cartItem, int quantity) {
+        cartItem.setQuantity(cartItem.getQuantity() + quantity);
+        return cartItem;
     }
 }

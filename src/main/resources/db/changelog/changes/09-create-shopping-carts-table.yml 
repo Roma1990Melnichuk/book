@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: create-shopping-carts-table
+      id: 09
       author: Roma1990Melnichuk
       changes:
         - createTable:
@@ -8,22 +8,24 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: BIGINT
+                  autoIncrement: true
                   constraints:
                     primaryKey: true
-                    nullable: false
               - column:
                   name: user_id
-                  type: bigint
+                  type: BIGINT
                   constraints:
                     nullable: false
                     unique: true
-                    foreignKeyName: fk_shopping_carts_user_id
-                    references: users(id)
               - column:
                   name: is_deleted
-                  type: boolean
+                  type: BOOLEAN
+                  defaultValue: false
                   constraints:
-                    defaultValue: false
-                    constraints:
-                    nullable: false
+                   nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: shopping_carts
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id

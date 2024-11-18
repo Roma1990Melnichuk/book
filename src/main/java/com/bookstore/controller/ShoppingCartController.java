@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/cart")
+@RequestMapping("/cart")
 @RequiredArgsConstructor
 @Tag(name = "Shopping Cart Management", description = "Endpoints for managing shopping carts")
 public class ShoppingCartController {
@@ -45,7 +45,7 @@ public class ShoppingCartController {
     public ShoppingCartDto addBookToShoppingCart(@RequestBody @Valid
                     UpdateCartItemDto request, Authentication authentication) {
         User user = (User) authentication.getPrincipal();
-        return shoppingCartService.save(request, user);
+        return shoppingCartService.addBookToShoppingCart(request, user);
     }
 
     @PutMapping("/items/{cartItemId}")

@@ -7,7 +7,7 @@ import com.bookstore.entity.User;
 public interface ShoppingCartService {
     void createShoppingCart(User user);
 
-    ShoppingCartDto save(UpdateCartItemDto itemDto, User user);
+    ShoppingCartDto addBookToShoppingCart(UpdateCartItemDto itemDto, User user);
 
     ShoppingCartDto getByUserId(Long id);
 
