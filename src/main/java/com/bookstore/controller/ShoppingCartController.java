@@ -55,7 +55,7 @@ public class ShoppingCartController {
             @PathVariable Long cartItemId,
             @Valid @RequestBody UpdateCartItemDto requestDto,
             @AuthenticationPrincipal User user) {
-        shoppingCartService.updateCartItemQuantity(cartItemId, requestDto);
+        shoppingCartService.updateCartItemQuantity(cartItemId, requestDto, user);
         return ResponseHandler.getSuccessResponse(
                 shoppingCartService.getByUserId(user.getId()));
     }
@@ -64,7 +64,8 @@ public class ShoppingCartController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Delete item from shopping cart",
             description = "Remove a specific item from the user's shopping cart")
-    public void deleteBookFromCartById(@PathVariable Long cartItemId) {
-        shoppingCartService.deleteCartItem(cartItemId);
+    public void deleteBookFromCartById(@PathVariable Long cartItemId,
+                                       @AuthenticationPrincipal User user) {
+        shoppingCartService.deleteCartItem(cartItemId, user);
     }
 }

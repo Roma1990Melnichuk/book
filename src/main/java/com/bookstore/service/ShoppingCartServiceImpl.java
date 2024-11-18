@@ -13,6 +13,7 @@ import com.bookstore.repository.CartItemRepository;
 import com.bookstore.repository.ShoppingCartRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,11 +31,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
+    @Transactional
     public ShoppingCartDto addBookToShoppingCart(UpdateCartItemDto itemDto, User user) {
-        if (itemDto.getQuantity() <= 0) {
-            throw new IllegalArgumentException("Quantity must be greater than zero");
-        }
-
         ShoppingCart shoppingCart = shoppingCartRepository.findByUserAndIsDeletedFalse(user)
                 .orElseThrow(() -> new EntityNotFoundException("Shopping cart not found"));
 
@@ -47,10 +45,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                             .orElseThrow(() -> new EntityNotFoundException("Book not found"));
                     return createNewCartItem(book, itemDto.getQuantity(), shoppingCart);
                 });
-
-        if (cartItem != null) {
-            shoppingCart.getCartItems().add(cartItem);
-        }
+        shoppingCart.getCartItems().add(cartItem);
 
         shoppingCartRepository.save(shoppingCart);
 
@@ -67,30 +62,34 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public void deleteCartItem(Long cartItemId) {
-        CartItem cartItem = cartItemRepository.findById(cartItemId)
+    public void deleteCartItem(Long cartItemId, User userId) {
+        ShoppingCart shoppingCart = shoppingCartRepository.findByUserAndIsDeletedFalse(userId)
                 .orElseThrow(() -> new EntityNotFoundException(
-                        "CartItem with ID " + cartItemId + " not found"));
+                        "Shopping cart not found for user with ID " + userId));
 
-        ShoppingCart shoppingCart = cartItem.getShoppingCart();
-        if (shoppingCart.isDeleted()) {
-            throw new IllegalStateException("Cannot delete CartItem from a deleted ShoppingCart");
-        }
+        CartItem cartItem = cartItemRepository.findByIdAndShoppingCartId(cartItemId,
+                        shoppingCart.getId())
+                .orElseThrow(() -> new EntityNotFoundException("CartItem with ID "
+                        + cartItemId + " not found in the user's shopping cart"));
 
+        shoppingCart.getCartItems().remove(cartItem);
         cartItemRepository.delete(cartItem);
     }
 
     @Override
     public ShoppingCartDto updateCartItemQuantity(Long cartItemId,
-                                                  UpdateCartItemDto updateCartItemDto) {
-        CartItem cartItem = cartItemRepository.findById(cartItemId)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "CartItem with ID " + cartItemId + " not found"));
+                                                  UpdateCartItemDto updateCartItemDto,
+                                                  User userId) {
+        ShoppingCart shoppingCart = shoppingCartRepository.findByUserAndIsDeletedFalse(userId)
+                .orElseThrow(()
+                        -> new EntityNotFoundException(
+                        "Shopping cart not found for user with ID " + userId));
 
-        ShoppingCart shoppingCart = cartItem.getShoppingCart();
-        if (shoppingCart.isDeleted()) {
-            throw new IllegalStateException("Cannot update CartItem in a deleted ShoppingCart");
-        }
+        CartItem cartItem = cartItemRepository.findByIdAndShoppingCartId(cartItemId,
+                        shoppingCart.getId())
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "CartItem with ID " + cartItemId
+                                + " not found in the user's shopping cart"));
 
         cartItem.setQuantity(updateCartItemDto.getQuantity());
         cartItemRepository.save(cartItem);
@@ -98,7 +97,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         return shoppingCartMapper.toDto(shoppingCart);
     }
 
-    private CartItem createNewCartItem(Book book, int quantity, ShoppingCart shoppingCart) {
+    private CartItem createNewCartItem(Book book,
+                                       int quantity, ShoppingCart shoppingCart) {
         CartItem newCartItem = new CartItem();
         newCartItem.setBook(book);
         newCartItem.setQuantity(quantity);

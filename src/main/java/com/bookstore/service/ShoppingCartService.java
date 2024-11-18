@@ -11,7 +11,7 @@ public interface ShoppingCartService {
 
     ShoppingCartDto getByUserId(Long id);
 
-    ShoppingCartDto updateCartItemQuantity(Long cartItemId, UpdateCartItemDto request);
+    ShoppingCartDto updateCartItemQuantity(Long cartItemId, UpdateCartItemDto request, User user);
 
-    void deleteCartItem(Long cartItemId);
+    void deleteCartItem(Long cartItemI, User userId);
 }
