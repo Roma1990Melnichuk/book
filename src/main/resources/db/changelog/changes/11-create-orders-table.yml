@@ -1,0 +1,44 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-order-table
+      author: Roma1990Melnichuk
+      changes:
+        - createTable:
+            tableName: orders
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: status
+                  type: varchar(255)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: total
+                  type: decimal(8,2)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: order_date
+                  type: timestamp
+                  constraints:
+                    nullable: true
+              - column:
+                  name: shipping_address
+                  type: varchar(255)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_deleted
+                  type: boolean
+                  constraints:
+                    nullable: true
