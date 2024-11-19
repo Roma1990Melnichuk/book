@@ -22,7 +22,6 @@ public interface BookMapper {
     @Mappings({
             @Mapping(source = "categories", target = "categories"),
             @Mapping(target = "id", ignore = true),
-            @Mapping(target = "deleted", ignore = true)
     })
 
     Book toBook(CreateBookRequestDto bookDto);
@@ -34,5 +33,15 @@ public interface BookMapper {
     @Named("categoryToId")
     default Long categoryToId(Category category) {
         return category.getId();
+    }
+
+    @Named("bookFromId")
+    default Book bookFromId(Long id) {
+        if (id == null) {
+            return null;
+        }
+        Book book = new Book();
+        book.setId(id);
+        return book;
     }
 }

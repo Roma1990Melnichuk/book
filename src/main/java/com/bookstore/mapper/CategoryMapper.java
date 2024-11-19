@@ -14,7 +14,6 @@ public interface CategoryMapper {
 
     @Mappings({
             @Mapping(target = "id", ignore = true),
-            @Mapping(target = "deleted", ignore = true)
     })
     Category toModel(CategoryRequestDto dto);
 

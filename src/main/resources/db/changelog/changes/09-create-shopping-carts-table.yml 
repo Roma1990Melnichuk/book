@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: 09
+      author: Roma1990Melnichuk
+      changes:
+        - createTable:
+            tableName: shopping_carts
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: is_deleted
+                  type: BOOLEAN
+                  defaultValue: false
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: shopping_carts
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id
