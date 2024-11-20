@@ -34,30 +34,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     @Override
-    public OrderDto orderReturn(OrderRequest request, User user) {
-        Order order = new Order();
-        order.setShippingAddress(request.getShippingAddress());
-        order.setStatus(Order.Status.PENDING);
-        BigDecimal total = BigDecimal.ZERO;
-        ShoppingCart shoppingCart = shoppingCartRepository.findByUser(user)
-                .orElseThrow(() -> new EntityNotFoundException("Shopping cart not found for user: "
-                        + user.getUsername()));
-        Set<OrderItem> orderItems = new HashSet<>();
-        for (CartItem cartItem : shoppingCart.getCartItems()) {
-            OrderItem orderItem = new OrderItem();
-            orderItem.setBook(cartItem.getBook());
-            orderItem.setQuantity(cartItem.getQuantity());
-            orderItem.setOrder(order);
-            orderItem.setPrice(cartItem.getBook().getPrice());
-            orderItems.add(orderItem);
-            total = total.add(cartItem.getBook().getPrice().multiply(
-                    BigDecimal.valueOf(cartItem.getQuantity())));
-        }
-        order.setTotal(total);
-        order.setOrderDate(LocalDateTime.now());
-        order.setOrderItems(orderItems);
-        order.setUser(user);
+    public OrderDto createOrder(OrderRequest request, User user) {
+        ShoppingCart shoppingCart = findShoppingCartByUser(user);
+
+        Order order = buildOrder(request, user, shoppingCart);
         orderRepository.save(order);
+
         return orderMapper.toDto(order);
     }
 
@@ -97,5 +79,46 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Order item not found with id: " + itemId));
         return orderItemMapper.toDto(orderItem);
+    }
+
+    private ShoppingCart findShoppingCartByUser(User user) {
+        return shoppingCartRepository.findByUser(user)
+                .orElseThrow(() -> new EntityNotFoundException("Shopping cart not found for user: "
+                        + user.getUsername()));
+    }
+
+    private Order buildOrder(OrderRequest request, User user, ShoppingCart shoppingCart) {
+        Order order = new Order();
+        order.setShippingAddress(request.getShippingAddress());
+        order.setStatus(Order.Status.PENDING);
+        order.setOrderDate(LocalDateTime.now());
+        order.setUser(user);
+
+        Set<OrderItem> orderItems = createOrderItems(shoppingCart, order);
+        BigDecimal total = calculateTotal(orderItems);
+
+        order.setOrderItems(orderItems);
+        order.setTotal(total);
+
+        return order;
+    }
+
+    private Set<OrderItem> createOrderItems(ShoppingCart shoppingCart, Order order) {
+        Set<OrderItem> orderItems = new HashSet<>();
+        for (CartItem cartItem : shoppingCart.getCartItems()) {
+            OrderItem orderItem = new OrderItem();
+            orderItem.setBook(cartItem.getBook());
+            orderItem.setQuantity(cartItem.getQuantity());
+            orderItem.setOrder(order);
+            orderItem.setPrice(cartItem.getBook().getPrice());
+            orderItems.add(orderItem);
+        }
+        return orderItems;
+    }
+
+    private BigDecimal calculateTotal(Set<OrderItem> orderItems) {
+        return orderItems.stream()
+                .map(item -> item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

@@ -9,7 +9,7 @@ import java.util.List;
 import org.springframework.data.domain.Pageable;
 
 public interface OrderService {
-    OrderDto orderReturn(OrderRequest requests, User user);
+    OrderDto createOrder(OrderRequest requests, User user);
 
     List<OrderDto> findAll(User user, Pageable pageable);
 

@@ -36,7 +36,7 @@ public class OrderController {
     @PostMapping
     public OrderDto placeOrder(@RequestBody OrderRequest request, Authentication authentication) {
         User user = (User) authentication.getPrincipal();
-        return orderService.orderReturn(request, user);
+        return orderService.createOrder(request, user);
     }
 
     @Operation(summary = "Get all orders",
