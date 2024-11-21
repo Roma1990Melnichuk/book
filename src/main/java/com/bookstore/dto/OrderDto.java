@@ -14,4 +14,3 @@ public class OrderDto {
     private BigDecimal total;
     private String status;
 }
-

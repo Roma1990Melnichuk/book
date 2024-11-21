@@ -51,7 +51,6 @@ public class OrderController {
     @Operation(summary = "Update order status",
             description = "Endpoint for updating the status of an order")
     @PatchMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
     public OrderDto updateOrderStatus(@PathVariable Long id,
                                       @RequestBody UpdateOrderStatusRequest request) {
         return orderService.updateOrderStatus(id, Order.Status.valueOf(request.getStatus()));
