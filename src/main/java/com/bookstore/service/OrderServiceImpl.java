@@ -11,11 +11,11 @@ import com.bookstore.entity.User;
 import com.bookstore.exception.EntityNotFoundException;
 import com.bookstore.mapper.OrderItemMapper;
 import com.bookstore.mapper.OrderMapper;
+import com.bookstore.repository.OrderItemRepository;
 import com.bookstore.repository.OrderRepository;
 import com.bookstore.repository.ShoppingCartRepository;
 import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Service
 public class OrderServiceImpl implements OrderService {
+    private final OrderItemRepository orderItemRepository;
     private final OrderRepository orderRepository;
     private final ShoppingCartRepository shoppingCartRepository;
     private final OrderMapper orderMapper;
@@ -69,15 +70,10 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderItemDto getOrderItem(Long orderId, Long itemId) {
-        Order order = orderRepository.findById(orderId)
+    public OrderItemDto getOrderItem(Long itemId, Long orderId) {
+        OrderItem orderItem = orderItemRepository.findByIdAndOrderId(itemId, orderId)
                 .orElseThrow(() -> new EntityNotFoundException(
-                        "Order not found with id: " + orderId));
-        OrderItem orderItem = order.getOrderItems().stream()
-                .filter(item -> item.getId().equals(itemId))
-                .findFirst()
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "Order item not found with id: " + itemId));
+                        "Order item not found with id: " + itemId + " for order id: " + orderId));
         return orderItemMapper.toDto(orderItem);
     }
 
@@ -90,8 +86,6 @@ public class OrderServiceImpl implements OrderService {
     private Order buildOrder(OrderRequest request, User user, ShoppingCart shoppingCart) {
         Order order = new Order();
         order.setShippingAddress(request.getShippingAddress());
-        order.setStatus(Order.Status.PENDING);
-        order.setOrderDate(LocalDateTime.now());
         order.setUser(user);
 
         Set<OrderItem> orderItems = createOrderItems(shoppingCart, order);
