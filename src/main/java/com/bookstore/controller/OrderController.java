@@ -35,7 +35,8 @@ public class OrderController {
     @PreAuthorize("hasRole('ROLE_USER')")
     @Operation(summary = "Place an order", description = "Endpoint for placing an order")
     @PostMapping
-    public OrderDto placeOrder(@RequestBody @Valid OrderRequest request, Authentication authentication) {
+    public OrderDto placeOrder(@RequestBody @Valid OrderRequest request,
+                               Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         return orderService.createOrder(request, user);
     }
