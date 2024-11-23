@@ -10,6 +10,7 @@ import com.bookstore.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -34,7 +35,7 @@ public class OrderController {
     @PreAuthorize("hasRole('ROLE_USER')")
     @Operation(summary = "Place an order", description = "Endpoint for placing an order")
     @PostMapping
-    public OrderDto placeOrder(@RequestBody OrderRequest request, Authentication authentication) {
+    public OrderDto placeOrder(@RequestBody @Valid OrderRequest request, Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         return orderService.createOrder(request, user);
     }
@@ -52,7 +53,7 @@ public class OrderController {
             description = "Endpoint for updating the status of an order")
     @PatchMapping("/{id}")
     public OrderDto updateOrderStatus(@PathVariable Long id,
-                                      @RequestBody UpdateOrderStatusRequest request) {
+                                      @RequestBody @Valid UpdateOrderStatusRequest request) {
         return orderService.updateOrderStatus(id, Order.Status.valueOf(request.getStatus()));
     }
 
