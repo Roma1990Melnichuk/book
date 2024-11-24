@@ -25,12 +25,19 @@
 		<springdoc-openapi-starter-webmvc-ui.version>2.6.0 </springdoc-openapi-starter-webmvc-ui.version>
 		<spring-security-core.version>6.3.3 </spring-security-core.version>
 		<jjwt.version>0.12.6</jjwt.version>
+		<spring-boot-docker-compose.version>3.1.1</spring-boot-docker-compose.version>
+
 	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-docker-compose</artifactId>
+			<version>${spring-boot-docker-compose.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

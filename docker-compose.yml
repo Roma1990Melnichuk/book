@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  mysqldb:
+    image: mysql:8
+    restart: unless-stopped
+    env_file:
+      - .env.temlate
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQLDB_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQLDB_DATABASE}
+    ports:
+      - "${MYSQLDB_LOCAL_PORT}:${MYSQLDB_DOCKER_PORT}"
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p${MYSQLDB_ROOT_PASSWORD}"]
+      interval: 30s
+      timeout: 30s
+      retries: 3
+
+  app:
+    depends_on:
+      - mysqldb
+    restart: on-failure
+    build: .
+    image: books-service
+    env_file:
+      - .env.temlate
+    ports:
+      - "${SPRING_LOCAL_PORT}:${SPRING_DOCKER_PORT}"
+    environment:
+      - DEBUG_PORT=${DEBUG_PORT}
