@@ -1,0 +1,1 @@
+insert into categories (id, name, discription) values (1, "Fiction", "Fantastic");
