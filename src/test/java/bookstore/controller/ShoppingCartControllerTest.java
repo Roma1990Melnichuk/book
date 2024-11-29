@@ -33,6 +33,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest(classes = OnlineBookstoreApplication.class)
@@ -135,15 +136,16 @@ class ShoppingCartControllerTest {
                 .andExpect(jsonPath("$.data.cartItems[0].quantity").value(2));
     }
 
+    @WithMockUser(username = "user", roles = {"USER"})
     @Test
     @DisplayName("Remove book from shopping cart (invalid data)")
     void removeBookFromCart_InvalidInput_ThrowsException() throws Exception {
         Long cartItemId = 999L;
 
-        Authentication authentication = new UsernamePasswordAuthenticationToken(user, null,
+        Authentication authentication = new UsernamePasswordAuthenticationToken("user", null,
                 AuthorityUtils.createAuthorityList("ROLE_USER"));
 
-        mockMvc.perform(delete("/items/{cartItemId}", cartItemId)
+        mockMvc.perform(delete("/shoppingCarts/cart-items/{cartItemId}", cartItemId)
                         .with(authentication(authentication)))
                 .andExpect(status().isNotFound());
     }
