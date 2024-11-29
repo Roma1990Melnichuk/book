@@ -17,13 +17,13 @@ import com.bookstore.entity.Category;
 import com.bookstore.service.BookService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
 import javax.sql.DataSource;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,7 +45,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-
 
 @SpringBootTest(classes = OnlineBookstoreApplication.class)
 class BookControllerTest {
@@ -164,14 +163,15 @@ class BookControllerTest {
         categories.add(category);
         requestDto.setCategories(categories);
 
-        String jsonRequest = objectMapper.writeValueAsString(requestDto);
-
         BookDto mockBook = new BookDto();
         mockBook.setId(1L);
         mockBook.setTitle("New Book Title");
         mockBook.setAuthor("John Doe");
 
-        Mockito.when(bookService.save(Mockito.any(CreateBookRequestDto.class))).thenReturn(mockBook);
+        String jsonRequest = objectMapper.writeValueAsString(requestDto);
+
+        Mockito.when(bookService.save(
+                Mockito.any(CreateBookRequestDto.class))).thenReturn(mockBook);
 
         MvcResult result = mockMvc.perform(
                         post("/books")
@@ -189,7 +189,6 @@ class BookControllerTest {
         assertEquals(mockBook.getTitle(), createdBook.getTitle());
         assertEquals(mockBook.getAuthor(), createdBook.getAuthor());
     }
-
 
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     @Test
@@ -230,7 +229,6 @@ class BookControllerTest {
         assertEquals(requestDto.getTitle(), updatedBook.getTitle());
         assertEquals(requestDto.getAuthor(), updatedBook.getAuthor());
     }
-
 
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     @Test
