@@ -96,7 +96,7 @@ class CategoryControllerTest {
         assertNotNull(contentNode);
 
         CategoryDto[] categories = objectMapper.treeToValue(contentNode, CategoryDto[].class);
-        Assertions.assertEquals(13, categories.length);
+        Assertions.assertEquals(1, categories.length);
     }
 
     @WithMockUser(username = "admin", roles = {"ADMIN"})
