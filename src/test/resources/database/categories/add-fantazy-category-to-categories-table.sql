@@ -1,1 +1,1 @@
-insert into categories (id, name, discription) values (1, "Fiction", "Fantastic");
+INSERT INTO categories (id, name, description) VALUES (1, "Fiction", "Fantastic");

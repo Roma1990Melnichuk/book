@@ -12,6 +12,7 @@ import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
@@ -41,5 +42,6 @@ public class OrderItem {
     private BigDecimal price;
 
     @Column(nullable = false)
+    @ColumnDefault(value = "false")
     private boolean isDeleted = false;
 }

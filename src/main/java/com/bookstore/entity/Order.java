@@ -19,6 +19,7 @@ import java.util.HashSet;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
@@ -54,6 +55,7 @@ public class Order {
     private Set<OrderItem> orderItems = new HashSet<>();
 
     @Column(name = "is_deleted", nullable = false)
+    @ColumnDefault(value = "false")
     private boolean isDeleted = false;
 
     public enum Status {

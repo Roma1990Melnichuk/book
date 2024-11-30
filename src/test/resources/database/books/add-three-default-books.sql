@@ -1,4 +1,7 @@
 
-insert into books (id, price, title, author, isbn) values (1, 10.99, 'Kobzar', 'Shevchenko','9460303332081');
-insert into books (id, price, title, author, isbn) values (2, 20.99, 'Avatar', 'Unknow', '9460306342021');
-insert into books (id, price, title, author, isbn) values (3, 30.99, 'Terminator', 'Arnold', '9460301332081');
+DELETE FROM books_categories WHERE book_id IN (SELECT id FROM books);
+DELETE FROM books;
+INSERT INTO books (id, price, title, author, isbn) VALUES
+                                                       (1, 10.99, 'Kobzar', 'Shevchenko', '9460303332081'),
+                                                       (2, 15.49, '1984', 'Orwell', '9780451524935'),
+                                                       (3, 7.99, 'The Catcher in the Rye', 'Salinger', '9780316769488');

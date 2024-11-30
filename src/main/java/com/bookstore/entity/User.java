@@ -16,6 +16,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 import org.springframework.security.core.GrantedAuthority;
@@ -53,6 +54,7 @@ public class User implements UserDetails {
     private Set<Role> roles = new HashSet<>();
 
     @Column(nullable = false)
+    @ColumnDefault(value = "false")
     private Boolean isDeleted = false;
 
     @Override

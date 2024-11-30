@@ -27,8 +27,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
@@ -40,11 +40,12 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@SpringBootTest(classes = OnlineBookstoreApplication.class)
-@Sql(scripts = "/database/categories/add-three-default-categories.sql",
+@Sql(scripts = "classpath:database/categories/add-three-default-categories.sql",
         executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@SpringBootTest(classes = OnlineBookstoreApplication.class)
+@AutoConfigureMockMvc
 class CategoryControllerTest {
+
     protected static MockMvc mockMvc;
 
     @Autowired
@@ -53,11 +54,9 @@ class CategoryControllerTest {
     @Autowired
     private CategoryService categoryService;
 
-    @Autowired
-    private DataSource dataSource;
-
     @BeforeAll
-    void setUp(@Autowired WebApplicationContext applicationContext) throws SQLException {
+    static void setUp(@Autowired WebApplicationContext applicationContext,
+                       @Autowired DataSource dataSource) throws SQLException {
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(applicationContext)
                 .apply(springSecurity())
@@ -65,7 +64,7 @@ class CategoryControllerTest {
     }
 
     @AfterEach
-    void cleanUpAfterEachTest() throws SQLException {
+    void cleanUpAfterEachTest(@Autowired DataSource dataSource) throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
             ScriptUtils.executeSqlScript(
                     connection,
@@ -96,7 +95,7 @@ class CategoryControllerTest {
         assertNotNull(contentNode);
 
         CategoryDto[] categories = objectMapper.treeToValue(contentNode, CategoryDto[].class);
-        Assertions.assertEquals(1, categories.length);
+        Assertions.assertEquals(3, categories.length);
     }
 
     @WithMockUser(username = "admin", roles = {"ADMIN"})

@@ -17,23 +17,17 @@ import com.bookstore.entity.Category;
 import com.bookstore.service.BookService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.HashSet;
 import java.util.Set;
-import javax.sql.DataSource;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
-import org.springframework.jdbc.datasource.init.ScriptUtils;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -41,6 +35,8 @@ import org.springframework.web.context.WebApplicationContext;
 import org.testcontainers.shaded.org.apache.commons.lang3.builder.EqualsBuilder;
 
 @SpringBootTest(classes = OnlineBookstoreApplication.class)
+@Sql(scripts = "classpath:database/books/add-three-default-books.sql",
+        executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 class BookControllerTest {
 
     private static MockMvc mockMvc;
@@ -50,28 +46,13 @@ class BookControllerTest {
     @Autowired
     private BookService bookService;
 
-    @BeforeAll
-    static void beforeAll(
-            @Autowired DataSource dataSource,
-            @Autowired WebApplicationContext applicationContext
-    ) throws SQLException {
+    @BeforeEach
+    void setUp(@Autowired WebApplicationContext applicationContext) {
+        objectMapper = new ObjectMapper();
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(applicationContext)
                 .apply(springSecurity())
                 .build();
-        teardown(dataSource);
-        try (Connection connection = dataSource.getConnection()) {
-            connection.setAutoCommit(true);
-            ScriptUtils.executeSqlScript(
-                    connection,
-                    new ClassPathResource("database/books/add-three-default-books.sql")
-            );
-        }
-    }
-
-    @BeforeEach
-    void setUp() {
-        objectMapper = new ObjectMapper();
     }
 
     @WithMockUser(username = "user", roles = {"USER"})
@@ -108,6 +89,8 @@ class BookControllerTest {
         assertEquals(1L, actualBook.getId());
     }
 
+    @Sql(scripts = "classpath:database/categories/add-fantazy-category-to-categories-table.sql",
+            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     @Test
     @DisplayName("Create a new book")
@@ -179,14 +162,5 @@ class BookControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isNoContent());
-    }
-
-    private static void teardown(DataSource dataSource) {
-        try (Connection connection = dataSource.getConnection()) {
-            Statement statement = connection.createStatement();
-            statement.executeUpdate("DELETE FROM books");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 }

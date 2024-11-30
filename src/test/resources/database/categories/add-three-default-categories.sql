@@ -1,5 +1,5 @@
-DELETE FROM categories WHERE id IN (1, 2, 3);
-
-insert into categories (id, name, description) values (1,'Fantasy', 'fantazy');
-insert into categories (id, name, description) values (2,'Fantastic', 'fantastic');
-insert into categories (id, name, description) values (3,'Math', 'math');
+DELETE FROM categories;
+INSERT INTO categories (id, name, description) VALUES
+                                                   (1, 'Category1', 'Description1'),
+                                                   (2, 'Fantastic', 'fantastic'),
+                                                   (3, 'Another Category', 'Another Description');

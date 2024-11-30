@@ -3,6 +3,7 @@ package bookstore.controller;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -98,6 +99,8 @@ class ShoppingCartControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.cartItems.length()").value(2));
+
+        verify(shoppingCartService).addBookToShoppingCart(any(UpdateCartItemDto.class), eq(user));
     }
 
     @Test
@@ -142,11 +145,7 @@ class ShoppingCartControllerTest {
     void removeBookFromCart_InvalidInput_ThrowsException() throws Exception {
         Long cartItemId = 999L;
 
-        Authentication authentication = new UsernamePasswordAuthenticationToken("user", null,
-                AuthorityUtils.createAuthorityList("ROLE_USER"));
-
-        mockMvc.perform(delete("/shoppingCarts/cart-items/{cartItemId}", cartItemId)
-                        .with(authentication(authentication)))
+        mockMvc.perform(delete("/shoppingCarts/cart-items/{cartItemId}", cartItemId))
                 .andExpect(status().isNotFound());
     }
 

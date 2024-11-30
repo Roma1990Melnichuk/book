@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
@@ -32,6 +33,7 @@ public class Category {
     private String description;
 
     @Column(nullable = false)
+    @ColumnDefault(value = "false")
     private boolean isDeleted = false;
 
     public Category(Long id) {
