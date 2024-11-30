@@ -18,6 +18,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Table(name = "shopping_carts")
@@ -42,5 +43,6 @@ public class ShoppingCart {
     private Set<CartItem> cartItems = new HashSet<>();
 
     @Column(nullable = false)
+    @ColumnDefault(value = "false")
     private boolean isDeleted = false;
 }

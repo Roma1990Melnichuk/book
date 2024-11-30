@@ -56,7 +56,7 @@ public class BookServiceImpl implements BookService {
 
     public Page<BookDtoWithoutCategoryIds> getBooksByCategoryId(
             Long categoryId, Pageable pageable) {
-        return bookRepository.findByCategoriesId(categoryId, pageable)
-                .map(bookMapper::toDtoWithoutCategories);
+        return (bookRepository.findByCategoriesId(categoryId, pageable)
+                .map(bookMapper::toDtoWithoutCategories));
     }
 }

@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,6 +34,7 @@ public class ShoppingCartController {
     @GetMapping
     @Operation(summary = "Get user's shopping cart",
             description = "Retrieve the shopping cart of the authenticated user")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public SuccessResponse<ShoppingCartDto> getShoppingCart(@AuthenticationPrincipal User user) {
         return ResponseHandler.getSuccessResponse(
                 shoppingCartService.getByUserId(user.getId()));
@@ -42,8 +44,9 @@ public class ShoppingCartController {
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Add a book to the shopping cart",
             description = "Add a book to the user's shopping cart")
-    public ShoppingCartDto addBookToShoppingCart(@RequestBody @Valid
-                    UpdateCartItemDto request, Authentication authentication) {
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public ShoppingCartDto addBookToShoppingCart(
+            @RequestBody @Valid UpdateCartItemDto request, Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         return shoppingCartService.addBookToShoppingCart(request, user);
     }
@@ -51,6 +54,7 @@ public class ShoppingCartController {
     @PutMapping("/items/{cartItemId}")
     @Operation(summary = "Update the quantity of an item in the shopping cart",
             description = "Update the quantity of a specific item in the user's shopping cart")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public SuccessResponse<ShoppingCartDto> updateCartItemQuantity(
             @PathVariable Long cartItemId,
             @Valid @RequestBody UpdateCartItemDto requestDto,
@@ -64,6 +68,7 @@ public class ShoppingCartController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Delete item from shopping cart",
             description = "Remove a specific item from the user's shopping cart")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public void deleteBookFromCartById(@PathVariable Long cartItemId,
                                        @AuthenticationPrincipal User user) {
         shoppingCartService.deleteCartItem(cartItemId, user);

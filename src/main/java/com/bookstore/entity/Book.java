@@ -17,6 +17,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -49,6 +50,7 @@ public class Book {
     private String coverImage;
 
     @Column(nullable = false)
+    @ColumnDefault(value = "false")
     private boolean isDeleted = false;
 
     @ManyToMany
